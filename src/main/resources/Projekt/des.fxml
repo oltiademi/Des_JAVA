@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="628.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Projekt.DESController">
+   <children>
+      <Label layoutX="47.0" layoutY="57.0" prefHeight="25.0" prefWidth="81.0" text="Plaintext: " />
+      <Label layoutX="513.0" layoutY="57.0" prefHeight="25.0" prefWidth="81.0" text="Ciphertext: " />
+      <TextField fx:id="plainTxt" layoutX="103.0" layoutY="57.0" prefHeight="135.0" prefWidth="356.0" />
+      <TextField fx:id="cipherTxt" layoutX="582.0" layoutY="57.0" prefHeight="135.0" prefWidth="356.0" />
+      <Label layoutX="35.0" layoutY="442.0" prefHeight="25.0" prefWidth="81.0" text="Decrypted: " />
+      <Label layoutX="521.0" layoutY="442.0" prefHeight="25.0" prefWidth="81.0" text="Encrypted: " />
+      <TextField fx:id="decryptTxt" editable="false" layoutX="103.0" layoutY="442.0" prefHeight="135.0" prefWidth="356.0" />
+      <TextField fx:id="encryptTxt" editable="false" layoutX="582.0" layoutY="442.0" prefHeight="135.0" prefWidth="356.0" />
+      <Button fx:id="encryptBtn" layoutX="414.0" layoutY="382.0" mnemonicParsing="false" onAction="#encrypt" prefHeight="41.0" prefWidth="95.0" text="Encrypt" />
+      <Button fx:id="decryptBtn" layoutX="516.0" layoutY="382.0" mnemonicParsing="false" onAction="#decrypt" prefHeight="41.0" prefWidth="95.0" text="Decrypt" />
+      <Label layoutX="392.0" layoutY="251.0" text="Key: " />
+      <TextField fx:id="keyTxt" layoutX="431.0" layoutY="247.0" />
+      <Button fx:id="generateBtn" layoutX="433.0" layoutY="289.0" mnemonicParsing="false" onAction="#generateKey" prefHeight="25.0" prefWidth="149.0" text="Generate Key" />
+   </children>
+</AnchorPane>
