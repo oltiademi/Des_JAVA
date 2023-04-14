@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="628.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Projekt.DESController">
+<AnchorPane prefHeight="600.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Projekt.DESController">
    <children>
-      <Label layoutX="47.0" layoutY="57.0" prefHeight="25.0" prefWidth="81.0" text="Plaintext: " />
-      <Label layoutX="513.0" layoutY="57.0" prefHeight="25.0" prefWidth="81.0" text="Ciphertext: " />
-      <TextField fx:id="plainTxt" layoutX="103.0" layoutY="57.0" prefHeight="135.0" prefWidth="356.0" />
-      <TextField fx:id="cipherTxt" layoutX="582.0" layoutY="57.0" prefHeight="135.0" prefWidth="356.0" />
-      <Label layoutX="35.0" layoutY="442.0" prefHeight="25.0" prefWidth="81.0" text="Decrypted: " />
-      <Label layoutX="521.0" layoutY="442.0" prefHeight="25.0" prefWidth="81.0" text="Encrypted: " />
-      <TextField fx:id="decryptTxt" editable="false" layoutX="103.0" layoutY="442.0" prefHeight="135.0" prefWidth="356.0" />
-      <TextField fx:id="encryptTxt" editable="false" layoutX="582.0" layoutY="442.0" prefHeight="135.0" prefWidth="356.0" />
-      <Button fx:id="encryptBtn" layoutX="414.0" layoutY="382.0" mnemonicParsing="false" onAction="#encrypt" prefHeight="41.0" prefWidth="95.0" text="Encrypt" />
-      <Button fx:id="decryptBtn" layoutX="516.0" layoutY="382.0" mnemonicParsing="false" onAction="#decrypt" prefHeight="41.0" prefWidth="95.0" text="Decrypt" />
-      <Label layoutX="392.0" layoutY="251.0" text="Key: " />
-      <TextField fx:id="keyTxt" layoutX="431.0" layoutY="247.0" />
-      <Button fx:id="generateBtn" layoutX="433.0" layoutY="289.0" mnemonicParsing="false" onAction="#generateKey" prefHeight="25.0" prefWidth="149.0" text="Generate Key" />
+      <Label layoutX="21.0" layoutY="57.0" prefHeight="25.0" prefWidth="81.0" style="-fx-font-weight: bold;" text="Text Input:">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font></Label>
+      <Label layoutX="678.0" layoutY="56.0" prefHeight="26.0" prefWidth="105.0" style="-fx-font-weight: bold;" text="Text Output:">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font></Label>
+      <Button fx:id="encryptBtn" layoutX="522.0" layoutY="344.0" mnemonicParsing="false" onAction="#EncryptText" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: red; -fx-text-fill: white; -fx-cursor: hand;" text="Encrypt">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font></Button>
+      <Button fx:id="decryptBtn" layoutX="624.0" layoutY="344.0" mnemonicParsing="false" onAction="#Decrypt" prefHeight="41.0" prefWidth="95.0" style="-fx-background-color: green; -fx-text-fill: white; -fx-cursor: hand;" text="Decrypt">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font></Button>
+      <Label layoutX="462.0" layoutY="251.0" style="-fx-font-weight: bold;" text="Key: ">
+         <font>
+            <Font name="Tahoma" size="14.0" />
+         </font></Label>
+      <TextField fx:id="keyTxt" layoutX="501.0" layoutY="247.0" />
+      <TextArea fx:id="plainTxt" layoutX="106.0" layoutY="56.0" prefColumnCount="356" prefHeight="135.0" prefRowCount="135" prefWidth="356.0" wrapText="true" />
+      <TextArea fx:id="cipherTxt" layoutX="793.0" layoutY="56.0" prefHeight="135.0" prefWidth="356.0" wrapText="true" />
+      <ComboBox fx:id="comboBox_key" layoutX="664.0" layoutY="247.0" prefWidth="150.0" />
+      <ComboBox fx:id="inpuTxt_ComboBox" layoutX="471.0" layoutY="56.0" prefWidth="150.0" />
+      <ComboBox fx:id="output_ComboBox" layoutX="1159.0" layoutY="56.0" prefWidth="150.0" />
    </children>
 </AnchorPane>
