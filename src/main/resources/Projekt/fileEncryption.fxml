@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Projekt.DESFileEncryption">
+   <children>
+      <Button layoutX="237.0" layoutY="232.0" mnemonicParsing="false" onAction="#encryptFile" style="-fx-background-color: red; -fx-text-fill: white;" text="Encrypt" />
+      <Button layoutX="300.0" layoutY="232.0" mnemonicParsing="false" onAction="#decryptFile" style="-fx-background-color: green; -fx-text-fill: white;" text="Decrypt" />
+      <Button fx:id="selectFileButton" layoutX="182.0" layoutY="125.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="25.0" prefWidth="110.0" text="Select Input File" />
+      <TextField fx:id="saveLocationTextField" layoutX="300.0" layoutY="125.0" onAction="#selectFile" />
+      <Button fx:id="selectFileButton1" layoutX="182.0" layoutY="175.0" mnemonicParsing="false" onAction="#selectFile1" text="Select Output File" />
+      <TextField fx:id="saveLocationTextField1" layoutX="300.0" layoutY="175.0" onAction="#selectFile1" />
+      <Label fx:id="labelTxt" alignment="CENTER" contentDisplay="CENTER" layoutY="301.0" prefHeight="17.0" prefWidth="600.0" style="-fx-text-fill: red;" textAlignment="CENTER" wrapText="true" />
+   </children>
+</AnchorPane>

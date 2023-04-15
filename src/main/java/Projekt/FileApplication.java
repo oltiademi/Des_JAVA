@@ -8,12 +8,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-public class HelloApplication extends Application {
+public class FileApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("des.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1350, 600);
-        stage.setTitle("DES Text Encryption!");
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fileEncryption.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        stage.setTitle("DES File Encryption!");
         stage.setScene(scene);
         stage.show();
     }
