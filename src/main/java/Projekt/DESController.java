@@ -2,6 +2,7 @@ package Projekt;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,6 +11,7 @@ import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -36,10 +38,54 @@ public class DESController implements Initializable {
     @FXML
     private TextArea plainTxt;
     String keyText;
+    public static byte[] binaryStringToByteArray(String binaryString) {
+        binaryString = binaryString.replaceAll("\\s+", "");
+        int length = binaryString.length();
+        if (length % 8 != 0) {
+            throw new IllegalArgumentException("Binary string length is not a multiple of 8");
+        }
+        byte[] byteArray = new byte[length / 8];
+        for (int i = 0; i < length; i += 8) {
+            String byteString = binaryString.substring(i, i + 8);
+            byte b = (byte) Integer.parseInt(byteString, 2);
+            byteArray[i / 8] = b;
+        }
+        return byteArray;
+    }
+    public static String byteArrayToBinaryString(byte[] data) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : data) {
+            sb.append(String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X ", b));
+        }
+        return sb.toString();
+    }
 
-    public void EncryptText() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException {
+    public static byte[] hexToBytes(String hex) {
+        String cleanHex = hex.replaceAll("\\s+", "");
+        int len = cleanHex.length();
+        byte[] result = new byte[len / 2];
 
+        for (int i = 0; i < len; i += 2) {
+            String hexByte = cleanHex.substring(i, i + 2); // Get each pair of hex characters
+            byte b = (byte) Integer.parseInt(hexByte, 16); // Convert the hex byte to binary
+            result[i / 2] = b; // Store the binary byte in the result array
+        }
+        return result;
+    }
+
+
+
+    public void EncryptText() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, Exception {
         keyText = keyTxt.getText();
+
         if (keyText.length() == 8) {
             // Convert the password to bytes
             byte[] passwordBytes = keyText.getBytes(StandardCharsets.UTF_8);
@@ -52,13 +98,32 @@ public class DESController implements Initializable {
             //Defines the encryption algorithm
             Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            //Gets byte array from string in the UTF-8 format
-            byte[] plaintextBytes = plainTxt.getText().getBytes(StandardCharsets.UTF_8);
+            //Gets byte array from plain text
+            byte[] plaintextBytes;
+            if(inpuTxt_ComboBox.getValue() == "Hexadecimal") {
+                plaintextBytes = hexToBytes(plainTxt.getText());
+            } else if (inpuTxt_ComboBox.getValue() == "Binary") {
+//                plaintextBytes = binaryStringToByteArray(plainTxt.getText());
+//                short a = Short.parseShort(plainTxt.getText(), 2);
+//                ByteBuffer bytes = ByteBuffer.allocate(2).putShort(a);
+                byte[] plainTextS =  binaryStringToByteArray(plainTxt.getText());
+                plaintextBytes = plainTextS;
+            } else {
+                plaintextBytes = plainTxt.getText().getBytes(StandardCharsets.UTF_8);
+            }
             // Encrypt the plaintext
             byte[] ciphertextBytes = cipher.doFinal(plaintextBytes);
+            System.out.println("encoding: " + ciphertextBytes.length);
             // Encode the ciphertext using Base64 for display
-            String ciphertext = Base64.getEncoder().encodeToString(ciphertextBytes);
-            cipherTxt.setText(ciphertext);
+            if (output_ComboBox.getValue().equals("Hexadecimal")) {
+                cipherTxt.setText(bytesToHex(ciphertextBytes));
+            } else if(output_ComboBox.getValue().equals("Text")){
+                String ciphertext = Base64.getEncoder().encodeToString(ciphertextBytes);
+                cipherTxt.setText(ciphertext);
+            } else { // binary
+                String txtBinary = byteArrayToBinaryString(ciphertextBytes);
+                cipherTxt.setText(txtBinary);
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
@@ -82,12 +147,28 @@ public class DESController implements Initializable {
             Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             //Gets byte array from the ciphertext
-            byte[] ciphertextBytes = Base64.getDecoder().decode(plainTxt.getText());
+            byte[] ciphertextBytes;
+            if(inpuTxt_ComboBox.getValue() == "Hexadecimal") {
+                ciphertextBytes = hexToBytes(plainTxt.getText());
+            } else if (inpuTxt_ComboBox.getValue() == "Binary") {
+//                byte[] cipherTextS =  plainTxt.getText().replace(" ", "").getBytes(StandardCharsets.UTF_8);
+                ciphertextBytes = binaryStringToByteArray(plainTxt.getText());
+            } else {
+                ciphertextBytes = Base64.getDecoder().decode(plainTxt.getText());
+            }
             // Decrypt the ciphertext
+            System.out.println("decoding: " + ciphertextBytes.length);
             byte[] plaintextBytes = cipher.doFinal(ciphertextBytes);
             // Convert the plaintext bytes to string
-            String plaintext = new String(plaintextBytes, StandardCharsets.UTF_8);
-            cipherTxt.setText(plaintext);
+            if (output_ComboBox.getValue().equals("Hexadecimal")) {
+                cipherTxt.setText(bytesToHex(plaintextBytes));
+            } else if(output_ComboBox.getValue().equals("Text")){
+                String plaintext = new String(plaintextBytes, StandardCharsets.UTF_8);
+                cipherTxt.setText(plaintext);
+            } else { // binary
+                String plaintext = byteArrayToBinaryString(plaintextBytes);
+                cipherTxt.setText(plaintext);
+            }
         }else{
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
@@ -100,8 +181,6 @@ public class DESController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> list = FXCollections.observableArrayList("Text", "Binary", "Hexadecimal");
-        comboBox_key.setItems(list);
-        comboBox_key.setValue("Hexadecimal");
         inpuTxt_ComboBox.setItems(list);
         inpuTxt_ComboBox.setValue("Text");
         output_ComboBox.setItems(list);
@@ -112,6 +191,23 @@ public class DESController implements Initializable {
         plainTxt.setText("The brown fox jumps over the lazy dog.");
     }
 
+    public void randomizeKey(ActionEvent actionEvent) {
+        String val = ""; // 65-90 letters 48-57 numbers,lowercase 97-112, these are for ascii? I played myself.
+        for(int i = 0; i < 8; i++) {
+            int randomB = (int)(Math.random() * 3) + 1;
+            int randomNumber;
+            if (randomB == 3) {
+                randomNumber = (int)(Math.random() * 90) + 65;
+            } else if(randomB == 2) {
+                randomNumber = (int)(Math.random() * 57) + 48;
+            } else {
+                randomNumber = (int) (Math.random() * 112) + 97;
+            }
+            char v = (char)randomNumber;
+            val += v;
+        }
+        keyTxt.setText(val);
+    }
 }
 
 
